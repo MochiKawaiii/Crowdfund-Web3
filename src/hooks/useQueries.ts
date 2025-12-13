@@ -1,6 +1,6 @@
 import { useSuiClientQuery } from "@mysten/dapp-kit";
 import { PACKAGE_ID, PLATFORM_ID, MODULES } from "../constants";
-import type { Campaign, Project, Platform } from "../types";
+import type { Campaign, Project } from "../types";
 
 // Fetch Platform data
 export function usePlatform() {
