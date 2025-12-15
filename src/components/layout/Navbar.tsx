@@ -2,16 +2,19 @@ import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
 import { Link, useLocation } from "react-router-dom";
 import { Compass, FolderKanban, Menu, X, Rocket, ChevronDown, BookOpen, Trophy } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { useLanguage } from "../../contexts";
+import { LanguageToggle } from "../common";
 
-const categories = [
-  "Art", "Comics", "Crafts", "Dance", "Design", "Fashion",
-  "Film", "Food", "Games", "Journalism", "Music", "Photography",
-  "Publishing", "Technology", "Theater", "Other"
+const categoryKeys = [
+  "art", "comics", "crafts", "dance", "design", "fashion",
+  "film", "food", "games", "journalism", "music", "photography",
+  "publishing", "technology", "theater", "other"
 ];
 
 export function Navbar() {
   const account = useCurrentAccount();
   const location = useLocation();
+  const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -55,7 +58,7 @@ export function Navbar() {
               }`}
             >
               <Compass className="w-4 h-4" />
-              <span>Explore</span>
+              <span>{t("nav.explore")}</span>
             </Link>
 
             {/* Categories Dropdown */}
@@ -68,21 +71,21 @@ export function Navbar() {
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
-                <span>Categories</span>
+                <span>{t("nav.categories")}</span>
                 <ChevronDown className={`w-4 h-4 transition-transform ${categoryDropdownOpen ? "rotate-180" : ""}`} />
               </button>
 
               {categoryDropdownOpen && (
                 <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
                   <div className="grid grid-cols-2 gap-1 p-2">
-                    {categories.map((category) => (
+                    {categoryKeys.map((catKey) => (
                       <Link
-                        key={category}
-                        to={`/?category=${category.toLowerCase()}`}
+                        key={catKey}
+                        to={`/?category=${catKey}`}
                         onClick={() => setCategoryDropdownOpen(false)}
                         className="px-3 py-2 text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-colors"
                       >
-                        {category}
+                        {t(`cat.${catKey}`)}
                       </Link>
                     ))}
                   </div>
@@ -101,7 +104,7 @@ export function Navbar() {
                 }`}
               >
                 <FolderKanban className="w-4 h-4" />
-                <span>My Projects</span>
+                <span>{t("nav.myProjects")}</span>
               </Link>
             )}
 
@@ -115,7 +118,7 @@ export function Navbar() {
               }`}
             >
               <BookOpen className="w-4 h-4" />
-              <span>Hướng dẫn</span>
+              <span>{t("nav.guide")}</span>
             </Link>
 
             {/* Success Stories Link */}
@@ -128,12 +131,15 @@ export function Navbar() {
               }`}
             >
               <Trophy className="w-4 h-4" />
-              <span>Thành công</span>
+              <span>{t("nav.successStories")}</span>
             </Link>
           </div>
 
           {/* Right Side */}
           <div className="flex items-center space-x-3">
+            {/* Language Toggle */}
+            <LanguageToggle />
+
             {/* Start Campaign Button - Only for connected users */}
             {account && (
               <Link
@@ -141,7 +147,7 @@ export function Navbar() {
                 className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-full hover:bg-emerald-700 transition-colors"
               >
                 <Rocket className="w-4 h-4" />
-                <span>Start</span>
+                <span>{t("nav.start")}</span>
               </Link>
             )}
 
@@ -172,21 +178,21 @@ export function Navbar() {
               }`}
             >
               <Compass className="w-5 h-5" />
-              <span>Explore</span>
+              <span>{t("nav.explore")}</span>
             </Link>
 
             {/* Categories in Mobile */}
             <div className="px-4 py-3">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Categories</p>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">{t("nav.categories")}</p>
               <div className="grid grid-cols-2 gap-1">
-                {categories.map((category) => (
+                {categoryKeys.map((catKey) => (
                   <Link
-                    key={category}
-                    to={`/?category=${category.toLowerCase()}`}
+                    key={catKey}
+                    to={`/?category=${catKey}`}
                     onClick={() => setMobileMenuOpen(false)}
                     className="px-3 py-2 text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg"
                   >
-                    {category}
+                    {t(`cat.${catKey}`)}
                   </Link>
                 ))}
               </div>
@@ -205,7 +211,7 @@ export function Navbar() {
                   }`}
                 >
                   <FolderKanban className="w-5 h-5" />
-                  <span>My Projects</span>
+                  <span>{t("nav.myProjects")}</span>
                 </Link>
                 <div className="px-4 py-4 border-t border-gray-100">
                   <Link
@@ -214,7 +220,7 @@ export function Navbar() {
                     className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-emerald-600 text-white font-medium rounded-xl hover:bg-emerald-700 transition-colors"
                   >
                     <Rocket className="w-5 h-5" />
-                    Start a Campaign
+                    {t("nav.startCampaign")}
                   </Link>
                 </div>
               </>
@@ -231,7 +237,7 @@ export function Navbar() {
               }`}
             >
               <BookOpen className="w-5 h-5" />
-              <span>Hướng dẫn</span>
+              <span>{t("nav.guide")}</span>
             </Link>
 
             {/* Success Stories - Mobile */}
@@ -245,12 +251,12 @@ export function Navbar() {
               }`}
             >
               <Trophy className="w-5 h-5" />
-              <span>Dự án thành công</span>
+              <span>{t("nav.successStories")}</span>
             </Link>
 
             {account && (
               <div className="px-4 py-2 text-xs text-gray-400 border-t border-gray-100">
-                Connected: {account.address.slice(0, 8)}...{account.address.slice(-6)}
+                {t("nav.connected")}: {account.address.slice(0, 8)}...{account.address.slice(-6)}
               </div>
             )}
           </div>

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { formatSUI } from "../constants";
 import { parseCampaignData, useContractCalls } from "../hooks";
+import { useLanguage } from "../contexts";
 import { DonateModal } from "../components/campaign/DonateModal";
 
 export function CampaignDetailPage() {
@@ -21,6 +22,7 @@ export function CampaignDetailPage() {
   const navigate = useNavigate();
   const account = useCurrentAccount();
   const { endCampaign, withdrawFunds, isPending } = useContractCalls();
+  const { t } = useLanguage();
   
   const [showDonateModal, setShowDonateModal] = useState(false);
 
@@ -48,21 +50,20 @@ export function CampaignDetailPage() {
     return (
       <div className="text-center py-20">
         <AlertCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">Campaign not found</h3>
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">{t("detail.notFound")}</h3>
         <button
           onClick={() => navigate("/")}
           className="text-blue-600 hover:underline"
         >
-          Go back to explore
+          {t("detail.back")}
         </button>
       </div>
     );
   }
 
-  const progress = Math.min(
-    (Number(campaign.current_amount) / Number(campaign.goal_amount)) * 100,
-    100
-  );
+  // Calculate actual progress (can exceed 100%)
+  const progress = (Number(campaign.current_amount) / Number(campaign.goal_amount)) * 100;
+  const progressDisplay = Math.round(progress);
   const endTime = new Date(Number(campaign.end_time));
   const now = new Date();
   const daysLeft = Math.max(0, Math.ceil((endTime.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
@@ -95,7 +96,7 @@ export function CampaignDetailPage() {
         className="flex items-center text-gray-600 hover:text-gray-900 mb-6"
       >
         <ArrowLeft className="w-5 h-5 mr-2" />
-        Back
+        {t("detail.back")}
       </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -130,7 +131,7 @@ export function CampaignDetailPage() {
           {/* Tiers */}
           {campaign.tiers.length > 0 && (
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Reward Tiers</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">{t("detail.tiers")}</h2>
               <div className="space-y-4">
                 {campaign.tiers.map((tier) => (
                   <div
@@ -169,23 +170,23 @@ export function CampaignDetailPage() {
           {campaign.transaction_history.length > 0 && (
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Transaction History
+                {t("detail.transactions")}
                 <span className="text-sm font-normal text-gray-500 ml-2">
-                  ({campaign.transaction_history.length} transactions)
+                  ({campaign.transaction_history.length} {t("detail.txCount")})
                 </span>
               </h2>
               <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
                 <table className="w-full text-sm">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-4 py-3 text-left text-gray-600">Type</th>
-                      <th className="px-4 py-3 text-left text-gray-600">Amount</th>
+                      <th className="px-4 py-3 text-left text-gray-600">{t("detail.txType")}</th>
+                      <th className="px-4 py-3 text-left text-gray-600">{t("detail.txAmount")}</th>
                       {isCreator && (
-                        <th className="px-4 py-3 text-left text-gray-600">Fee</th>
+                        <th className="px-4 py-3 text-left text-gray-600">{t("detail.txFee")}</th>
                       )}
-                      <th className="px-4 py-3 text-left text-gray-600">Time</th>
+                      <th className="px-4 py-3 text-left text-gray-600">{t("detail.txTime")}</th>
                       {isCreator && (
-                        <th className="px-4 py-3 text-left text-gray-600">From</th>
+                        <th className="px-4 py-3 text-left text-gray-600">{t("detail.txFrom")}</th>
                       )}
                     </tr>
                   </thead>
@@ -198,7 +199,7 @@ export function CampaignDetailPage() {
                               ? "bg-green-100 text-green-700" 
                               : "bg-orange-100 text-orange-700"
                           }`}>
-                            {tx.tx_type === "deposit" ? "Donation" : "Withdraw"}
+                            {tx.tx_type === "deposit" ? t("detail.donation") : t("detail.withdrawal")}
                           </span>
                         </td>
                         <td className="px-4 py-3 text-gray-900 font-medium">{formatSUI(tx.amount)} SUI</td>
@@ -220,7 +221,7 @@ export function CampaignDetailPage() {
               </div>
               {!isCreator && (
                 <p className="text-xs text-gray-400 mt-2 text-center">
-                  🔗 All transactions are recorded on-chain for transparency
+                  🔗 {t("detail.onchain")}
                 </p>
               )}
             </div>
@@ -238,11 +239,11 @@ export function CampaignDetailPage() {
                     {formatSUI(campaign.current_amount)}
                   </p>
                   <p className="text-gray-500">
-                    SUI raised of {formatSUI(campaign.goal_amount)} SUI goal
+                    SUI {t("detail.raised")} {formatSUI(campaign.goal_amount)} SUI {t("detail.goal")}
                   </p>
                 </div>
-                <span className="text-2xl font-bold text-blue-600">
-                  {progress.toFixed(0)}%
+                <span className={`text-2xl font-bold ${progressDisplay >= 100 ? "text-green-600" : "text-blue-600"}`}>
+                  {progressDisplay}%
                 </span>
               </div>
               <div className="w-full bg-gray-100 rounded-full h-3">
@@ -260,17 +261,17 @@ export function CampaignDetailPage() {
                 <Users className="w-5 h-5 text-gray-400" />
                 <div>
                   <p className="font-semibold text-gray-900">{campaign.total_supporters}</p>
-                  <p className="text-xs text-gray-500">Supporters</p>
+                  <p className="text-xs text-gray-500">{t("detail.supporters")}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
                 <Clock className="w-5 h-5 text-gray-400" />
                 <div>
                   <p className="font-semibold text-gray-900">
-                    {isEnded ? "Ended" : `${daysLeft} days`}
+                    {isEnded ? t("detail.ended") : `${daysLeft} ${t("detail.days")}`}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {isEnded ? endTime.toLocaleDateString() : "remaining"}
+                    {isEnded ? endTime.toLocaleDateString() : t("detail.timeLeft")}
                   </p>
                 </div>
               </div>
@@ -281,23 +282,23 @@ export function CampaignDetailPage() {
               {isCreator && campaign.is_withdrawn && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-700">
                   <CheckCircle className="w-4 h-4 mr-1" />
-                  Funds Withdrawn
+                  {t("detail.fundsWithdrawn")}
                 </span>
               )}
               {campaign.is_funded && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
                   <CheckCircle className="w-4 h-4 mr-1" />
-                  Funded
+                  {t("detail.funded")}
                 </span>
               )}
               {campaign.extensions_used > 0 && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-700">
-                  Extended {campaign.extensions_used}x
+                  {t("detail.extended")} {campaign.extensions_used}x
                 </span>
               )}
               {!campaign.is_active && !campaign.is_withdrawn && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
-                  Closed
+                  {t("detail.closed")}
                 </span>
               )}
             </div>
@@ -309,7 +310,7 @@ export function CampaignDetailPage() {
                   onClick={() => setShowDonateModal(true)}
                   className="w-full py-3 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 transition-colors"
                 >
-                  Donate Now
+                  {t("detail.donateNow")}
                 </button>
               )}
 
@@ -319,7 +320,7 @@ export function CampaignDetailPage() {
                   disabled={isPending}
                   className="w-full py-3 bg-gray-600 text-white rounded-xl font-medium hover:bg-gray-700 transition-colors disabled:opacity-50"
                 >
-                  {isPending ? "Processing..." : "End Campaign"}
+                  {isPending ? t("detail.processing") : t("detail.endCampaign")}
                 </button>
               )}
 
@@ -329,16 +330,16 @@ export function CampaignDetailPage() {
                   disabled={isPending}
                   className="w-full py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
                 >
-                  {isPending ? "Processing..." : "Withdraw Funds"}
+                  {isPending ? t("detail.withdrawing") : t("detail.withdraw")}
                 </button>
               )}
 
               {isCreator && campaign.is_withdrawn && (
                 <div className="w-full py-4 px-4 bg-green-50 border border-green-200 rounded-xl text-center">
                   <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                  <p className="text-green-700 font-medium">Funds Successfully Withdrawn</p>
+                  <p className="text-green-700 font-medium">{t("detail.withdrawSuccess")}</p>
                   <p className="text-green-600 text-sm mt-1">
-                    {formatSUI(campaign.current_amount)} SUI has been transferred to creator
+                    {formatSUI(campaign.current_amount)} SUI {t("detail.transferredToCreator")}
                   </p>
                 </div>
               )}
@@ -347,7 +348,7 @@ export function CampaignDetailPage() {
 
           {/* Creator Info */}
           <div className="bg-white border border-gray-200 rounded-2xl p-6">
-            <h3 className="font-semibold text-gray-900 mb-3">Creator</h3>
+            <h3 className="font-semibold text-gray-900 mb-3">{t("detail.creator")}</h3>
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600 font-mono">
                 {campaign.creator.slice(0, 8)}...{campaign.creator.slice(-6)}

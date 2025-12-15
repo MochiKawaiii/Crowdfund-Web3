@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Clock, Users, Star } from "lucide-react";
 import { formatSUI } from "../../constants";
+import { useLanguage } from "../../contexts";
 import type { Campaign } from "../../types";
 
 interface FeaturedCampaignProps {
@@ -8,6 +9,7 @@ interface FeaturedCampaignProps {
 }
 
 export function FeaturedCampaign({ campaign }: FeaturedCampaignProps) {
+  const { t } = useLanguage();
   const progress = Math.min(
     (Number(campaign.current_amount) / Number(campaign.goal_amount)) * 100,
     100
@@ -35,14 +37,14 @@ export function FeaturedCampaign({ campaign }: FeaturedCampaignProps) {
           )}
           <div className="absolute top-4 left-4">
             <span className="bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full">
-              ⭐ Featured
+              ⭐ {t("featured.badge")}
             </span>
           </div>
         </div>
 
         {/* Content */}
         <div className="p-8 lg:p-10 flex flex-col justify-center">
-          <div className="text-sm text-emerald-600 font-medium mb-2">FEATURED PROJECT</div>
+          <div className="text-sm text-emerald-600 font-medium mb-2">{t("featured.label")}</div>
           <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
             {campaign.name}
           </h2>
@@ -54,10 +56,10 @@ export function FeaturedCampaign({ campaign }: FeaturedCampaignProps) {
           <div className="mb-6">
             <div className="flex justify-between text-sm mb-2">
               <span className="font-semibold text-emerald-600">
-                {formatSUI(campaign.current_amount)} SUI raised
+                {formatSUI(campaign.current_amount)} SUI {t("featured.raised")}
               </span>
               <span className="text-gray-500">
-                {Math.round(progress)}% of {formatSUI(campaign.goal_amount)} SUI
+                {Math.round(progress)}% {t("featured.of")} {formatSUI(campaign.goal_amount)} SUI
               </span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3">
@@ -72,11 +74,11 @@ export function FeaturedCampaign({ campaign }: FeaturedCampaignProps) {
           <div className="flex items-center gap-6 mb-8">
             <div className="flex items-center gap-2 text-gray-600">
               <Users className="w-5 h-5" />
-              <span className="font-medium">{campaign.total_supporters} backers</span>
+              <span className="font-medium">{campaign.total_supporters} {t("featured.backers")}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
               <Clock className="w-5 h-5" />
-              <span className="font-medium">{daysLeft} days left</span>
+              <span className="font-medium">{daysLeft} {t("featured.daysLeft")}</span>
             </div>
           </div>
 
@@ -84,7 +86,7 @@ export function FeaturedCampaign({ campaign }: FeaturedCampaignProps) {
             to={`/campaign/${campaign.id}`}
             className="inline-flex items-center justify-center px-8 py-4 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors"
           >
-            View Campaign
+            {t("featured.viewCampaign")}
           </Link>
         </div>
       </div>

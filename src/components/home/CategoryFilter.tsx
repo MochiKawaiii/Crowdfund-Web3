@@ -1,11 +1,12 @@
 import { Flame, Clock, TrendingUp, Sparkles, MapPin } from "lucide-react";
+import { useLanguage } from "../../contexts";
 
-const categories = [
-  { id: "all", label: "All", icon: Sparkles },
-  { id: "trending", label: "Trending", icon: TrendingUp },
-  { id: "ending-soon", label: "Ending Soon", icon: Clock },
-  { id: "just-launched", label: "Just Launched", icon: Flame },
-  { id: "near-goal", label: "Almost Funded", icon: MapPin },
+const categoryKeys = [
+  { id: "all", key: "filter.all", icon: Sparkles },
+  { id: "trending", key: "filter.trending", icon: TrendingUp },
+  { id: "ending-soon", key: "filter.endingSoon", icon: Clock },
+  { id: "just-launched", key: "filter.justLaunched", icon: Flame },
+  { id: "near-goal", key: "filter.almostFunded", icon: MapPin },
 ];
 
 interface CategoryFilterProps {
@@ -14,9 +15,11 @@ interface CategoryFilterProps {
 }
 
 export function CategoryFilter({ activeCategory, onCategoryChange }: CategoryFilterProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="flex flex-wrap gap-2 justify-center py-6">
-      {categories.map((category) => (
+      {categoryKeys.map((category) => (
         <button
           key={category.id}
           onClick={() => onCategoryChange(category.id)}
@@ -27,7 +30,7 @@ export function CategoryFilter({ activeCategory, onCategoryChange }: CategoryFil
           }`}
         >
           <category.icon className="w-4 h-4" />
-          {category.label}
+          {t(category.key)}
         </button>
       ))}
     </div>

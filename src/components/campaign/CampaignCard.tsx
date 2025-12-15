@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Clock, Users, Target, CheckCircle, TrendingUp } from "lucide-react";
 import { formatSUI } from "../../constants";
+import { useLanguage } from "../../contexts";
 import type { Campaign } from "../../types";
 
 interface CampaignCardProps {
@@ -9,6 +10,7 @@ interface CampaignCardProps {
 }
 
 export function CampaignCard({ campaign, featured = false }: CampaignCardProps) {
+  const { t } = useLanguage();
   const progress = Math.min(
     (Number(campaign.current_amount) / Number(campaign.goal_amount)) * 100,
     100
@@ -22,10 +24,10 @@ export function CampaignCard({ campaign, featured = false }: CampaignCardProps) 
   const isAlmostFunded = progress >= 80 && progress < 100;
 
   const getTimeDisplay = () => {
-    if (isEnded) return "Ended";
-    if (daysLeft === 0) return `${hoursLeft}h left`;
-    if (daysLeft === 1) return "1 day left";
-    return `${daysLeft} days left`;
+    if (isEnded) return t("card.ended");
+    if (daysLeft === 0) return `${hoursLeft}h ${t("card.left")}`;
+    if (daysLeft === 1) return `1 ${t("card.dayLeft")}`;
+    return `${daysLeft} ${t("card.daysLeft")}`;
   };
 
   return (
@@ -56,13 +58,13 @@ export function CampaignCard({ campaign, featured = false }: CampaignCardProps) 
           {campaign.is_funded && (
             <span className="inline-flex items-center gap-1 bg-green-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
               <CheckCircle className="w-3 h-3" />
-              Funded
+              {t("card.funded")}
             </span>
           )}
           {isAlmostFunded && !campaign.is_funded && (
             <span className="inline-flex items-center gap-1 bg-orange-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
               <TrendingUp className="w-3 h-3" />
-              Almost there!
+              {t("card.almostThere")}
             </span>
           )}
         </div>
@@ -115,14 +117,14 @@ export function CampaignCard({ campaign, featured = false }: CampaignCardProps) 
                 {formatSUI(campaign.current_amount)} <span className="text-sm font-normal text-gray-500">SUI</span>
               </p>
               <p className="text-sm text-gray-400">
-                pledged of {formatSUI(campaign.goal_amount)} SUI goal
+                {t("card.pledged")} {formatSUI(campaign.goal_amount)} SUI
               </p>
             </div>
             <div className="text-right">
               <p className={`text-2xl font-bold ${progress >= 100 ? "text-green-600" : "text-emerald-600"}`}>
                 {Math.round(progress)}%
               </p>
-              <p className="text-sm text-gray-400">funded</p>
+              <p className="text-sm text-gray-400">{t("card.fundedPercent")}</p>
             </div>
           </div>
 
@@ -131,7 +133,7 @@ export function CampaignCard({ campaign, featured = false }: CampaignCardProps) 
             <div className="flex items-center gap-1.5">
               <Users className="w-4 h-4" />
               <span className="font-medium">{campaign.total_supporters}</span>
-              <span>backers</span>
+              <span>{t("card.backers")}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Clock className="w-4 h-4" />
