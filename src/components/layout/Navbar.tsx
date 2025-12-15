@@ -1,6 +1,6 @@
 import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
 import { Link, useLocation } from "react-router-dom";
-import { Compass, FolderKanban, Menu, X, Rocket, ChevronDown } from "lucide-react";
+import { Compass, FolderKanban, Menu, X, Rocket, ChevronDown, BookOpen, Trophy } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 const categories = [
@@ -104,6 +104,32 @@ export function Navbar() {
                 <span>My Projects</span>
               </Link>
             )}
+
+            {/* Guide Link */}
+            <Link
+              to="/guide"
+              className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                isActive("/guide")
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              }`}
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Hướng dẫn</span>
+            </Link>
+
+            {/* Success Stories Link */}
+            <Link
+              to="/success-stories"
+              className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                isActive("/success-stories")
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              }`}
+            >
+              <Trophy className="w-4 h-4" />
+              <span>Thành công</span>
+            </Link>
           </div>
 
           {/* Right Side */}
@@ -193,6 +219,34 @@ export function Navbar() {
                 </div>
               </>
             )}
+
+            {/* Guide Link - Mobile */}
+            <Link
+              to="/guide"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`flex items-center space-x-3 px-4 py-3.5 text-sm font-medium border-t border-gray-100 ${
+                isActive("/guide")
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <BookOpen className="w-5 h-5" />
+              <span>Hướng dẫn</span>
+            </Link>
+
+            {/* Success Stories - Mobile */}
+            <Link
+              to="/success-stories"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`flex items-center space-x-3 px-4 py-3.5 text-sm font-medium border-t border-gray-100 ${
+                isActive("/success-stories")
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <Trophy className="w-5 h-5" />
+              <span>Dự án thành công</span>
+            </Link>
 
             {account && (
               <div className="px-4 py-2 text-xs text-gray-400 border-t border-gray-100">
