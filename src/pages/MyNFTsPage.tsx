@@ -1,10 +1,16 @@
 import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
 import { Wallet, Loader2, Gift, ExternalLink } from "lucide-react";
 import { PACKAGE_ID, MODULES, formatSUI } from "../constants";
+import { useDocumentTitle } from "../hooks";
+import { useLanguage } from "../contexts";
 import type { SupporterNFT } from "../types";
 
 export function MyNFTsPage() {
   const account = useCurrentAccount();
+  const { t } = useLanguage();
+
+  // Set page title
+  useDocumentTitle(t("nav.myNFTs"));
 
   // Fetch user's NFTs
   const { data: nftsData, isLoading } = useSuiClientQuery(

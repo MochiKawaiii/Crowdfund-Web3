@@ -8,3 +8,4 @@ export {
   parseCampaignData,
   parseProjectData,
 } from "./useQueries";
+export { useDocumentTitle } from "./useDocumentTitle";

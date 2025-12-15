@@ -5,11 +5,16 @@ import { CreateProjectModal } from "../components/project/CreateProjectModal";
 import { CreateCampaignModal } from "../components/campaign/CreateCampaignModal";
 import { CampaignCard } from "../components/campaign/CampaignCard";
 import { PACKAGE_ID, MODULES } from "../constants";
-import { parseProjectData, parseCampaignData } from "../hooks";
+import { parseProjectData, parseCampaignData, useDocumentTitle } from "../hooks";
+import { useLanguage } from "../contexts";
 import type { Project, Campaign } from "../types";
 
 export function MyProjectsPage() {
   const account = useCurrentAccount();
+  const { t } = useLanguage();
+
+  // Set page title
+  useDocumentTitle(t("nav.myProjects"));
   const [showCreateProject, setShowCreateProject] = useState(false);
   const [showCreateCampaign, setShowCreateCampaign] = useState(false);
 

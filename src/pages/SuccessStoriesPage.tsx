@@ -2,7 +2,7 @@ import { Trophy, Users, Target, Calendar, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSuiClientQuery } from "@mysten/dapp-kit";
 import { PACKAGE_ID, MODULES, formatSUI } from "../constants";
-import { parseCampaignData } from "../hooks";
+import { parseCampaignData, useDocumentTitle } from "../hooks";
 import { useLanguage } from "../contexts";
 import type { Campaign } from "../types";
 
@@ -37,6 +37,9 @@ const getPercentage = (current: string, goal: string) => {
 
 export function SuccessStoriesPage() {
   const { t } = useLanguage();
+
+  // Set page title
+  useDocumentTitle(t("nav.success"));
 
   // Fetch all campaign created events
   const { data: eventsData, isLoading } = useSuiClientQuery("queryEvents", {

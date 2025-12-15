@@ -13,7 +13,7 @@ import {
   AlertCircle
 } from "lucide-react";
 import { formatSUI } from "../constants";
-import { parseCampaignData, useContractCalls } from "../hooks";
+import { parseCampaignData, useContractCalls, useDocumentTitle } from "../hooks";
 import { useLanguage } from "../contexts";
 import { DonateModal } from "../components/campaign/DonateModal";
 
@@ -37,6 +37,9 @@ export function CampaignDetailPage() {
   );
 
   const campaign = campaignData?.data ? parseCampaignData(campaignData.data) : null;
+
+  // Set page title with campaign name
+  useDocumentTitle(campaign?.name || t("detail.notFound"), [campaign?.name]);
 
   if (isLoading) {
     return (

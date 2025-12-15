@@ -5,7 +5,7 @@ import { Search, Loader2, Rocket, ArrowRight, Sparkles, X } from "lucide-react";
 import { CampaignCard } from "../components/campaign/CampaignCard";
 import { HeroSection, CategoryFilter, FeaturedCampaign } from "../components/home";
 import { PACKAGE_ID, MODULES } from "../constants";
-import { parseCampaignData } from "../hooks";
+import { parseCampaignData, useDocumentTitle } from "../hooks";
 import { useLanguage } from "../contexts";
 import type { Campaign } from "../types";
 
@@ -15,6 +15,9 @@ export function ExplorePage() {
   const [category, setCategory] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { t } = useLanguage();
+
+  // Set page title
+  useDocumentTitle(t("nav.explore"));
 
   // Read category from URL params
   useEffect(() => {

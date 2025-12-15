@@ -1,9 +1,13 @@
 import { BookOpen, Wallet, FolderPlus, Rocket, Gift, ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../contexts";
+import { useDocumentTitle } from "../hooks";
 
 export function GuidePage() {
   const { t } = useLanguage();
+
+  // Set page title
+  useDocumentTitle(t("nav.guide"));
 
   const forSupporters = [
     {
